@@ -1,0 +1,9 @@
+<!--pages/main.wxml-->
+<view class='root'>
+  <view class='contianer'>
+    <view class='point' wx:for="{{letter.chinese.bishun[0]}}" wx:if='{{index<1}}' style='top:{{item[0]}};left:{{item[1]}}; width: 4rpx;height: 4rpx; background: black; position: filxed;'></view>
+
+
+  </view>
+
+</view>

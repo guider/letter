@@ -1,0 +1,21 @@
+/* pages/main.wxss */
+
+.root{
+  background: white;
+  width: 100%;
+  height: 100vh;
+}
+.contianer{
+  width: 400rpx;
+  height: 400rpx;
+  background: red;
+
+}
+
+.pointb{
+  width: 20rpx;
+  height: 20rpx;
+  background: black;
+  position: relative;
+
+}
