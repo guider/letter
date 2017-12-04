@@ -1,7 +1,7 @@
 /* pages/main.wxss */
 
 .root{
-  background: white;
+  background: #f4f4f4;
   width: 100%;
   height: 100vh;
 }
@@ -9,13 +9,13 @@
   width: 400rpx;
   height: 400rpx;
   background: red;
-
+  top: 100rpx;
+  left: 100rpx;
 }
 
-.pointb{
-  width: 20rpx;
-  height: 20rpx;
+.point{
+  width: 6rpx;
+  height: 6rpx;
   background: black;
-  position: relative;
-
+  position: absolute;
 }
