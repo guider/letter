@@ -22,7 +22,29 @@ Page({
     this.data.letter = JSON.parse(this.data.data.content);
     this.setData(this.data);
 
+    var context= wx.createCanvasContext('stage');
+    context.setStrokeStyle("#000000");
+    context.setFillStyle('#000000');
 
+
+    var tmpArr = this.data.letter.chinese.bishun[0];
+
+    if (tmpArr && tmpArr.length>0){
+    
+    console.log(tmpArr);
+    context.moveTo(tmpArr[0][0]/8, tmpArr[0][0]/8);
+    context.stroke();
+
+    for (var i = 0; i <= tmpArr.length-1; i++) {
+      console.log(tmpArr[i][0]/8)
+      context.lineTo(tmpArr[i][0]/8, tmpArr[i][1]/8);
+
+    }
+    console.log(context);
+    context.stroke();
+    context.draw()
+  
+    }
     
   },
 
