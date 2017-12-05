@@ -6,6 +6,7 @@ Page({
    */
   data: {
     letter: [],
+    scale: 4,
     "data": {
       "id": 18510,
       "chinese_word": "陌",
@@ -21,52 +22,108 @@ Page({
     this.data.letter = JSON.parse(this.data.data.content);
     this.setData(this.data);
     var arr = this.data.letter.chinese.bishun;
+
+
+    this.drawOutline(wx.createCanvasContext('stage'));
+
     var context = wx.createCanvasContext('stage');
     context.setStrokeStyle("#000000");
     context.setFillStyle('#000000');
-    
-
-
+    var self = this;
     var count = 0;
-    var timer = setInterval(function(){
-      if (count < arr.length){
+    var timer = setInterval(function () {
+      if (count < arr.length) {
         count++;
-        var tArr = arr.slice(0,count);
-        tArr.forEach(function (tmpArr) {
+        var tmpArr = arr.slice(0, count);
         if (tmpArr && tmpArr.length > 0) {
-          context.moveTo(tmpArr[0][0] / 8, tmpArr[0][0] / 8);
-          context.stroke();
-          for (var i = 0; i <= tmpArr.length - 1; i++) {
-            context.lineTo(tmpArr[i][0] / 8, tmpArr[i][1] / 8);
-          }
-          context.stroke();
+          var childCount = 0;
+          var childTimer = setInterval(function () {
+            var tArr = tmpArr[tmpArr.length - 1];
+            if (childCount < tArr.length / 15) {
+              childCount++;
+              var childArr = tArr.slice(0, childCount * 15);
+              self.drawOneStroke(context, childArr);
+              context.draw(true);
+            } else {
+              clearInterval(childTimer);
+              childCount = 0;
+            }
+
+          }, 40);
         }
-        });
-        context.draw()    
-        
-      }else{
+      } else {
         clearInterval(timer);
-        count=0;
+        count = 0;
       }
-    },800);
-    // arr.forEach(function(item){
-    //   var tmpArr = item;
-    //   if (tmpArr && tmpArr.length > 0) {
-    //     context.moveTo(tmpArr[0][0] / 8, tmpArr[0][0] / 8);
-    //     context.stroke();
-    //     for (var i = 0; i <= tmpArr.length - 1; i++) {
-    //       context.lineTo(tmpArr[i][0] / 8, tmpArr[i][1] / 8);
+    }, 1000);
+
+  },
+  drawOneStroke: function (context, childArr) {
+    if (!childArr || !childArr.length) {
+      return;
+    }
+    var scale = this.data.scale;
+
+    context.moveTo(childArr[0][0] / scale, childArr[0][1] / scale);
+    context.stroke();
+    for (var i = 0; i <= childArr.length - 1; i++) {
+      context.lineTo(childArr[i][0] / scale, childArr[i][1] / scale);
+    }
+    context.stroke();
+  },
+
+  drawOutline(context) {
+    var arr = this.data.letter.chinese.bihua;
+    context.setStrokeStyle("#999999");
+    context.setFillStyle('#999999');
+    var self = this;
+
+    arr.forEach(function (item, index) {
+      self.drawOneStroke(context, item);
+
+      // item.forEach(function(childItem,index){
+      //   console.log(childItem);
+      // });
+    });
+    context.stroke();
+    context.draw(true);
+
+    // var count = 0;
+    // var timer = setInterval(function () {
+    //   if (count < arr.length) {
+    //     count++;
+    //     var tmpArr = arr.slice(0, count);
+    //     if (tmpArr && tmpArr.length > 0) {
+    //       var childCount = 0;
+    //       var childTimer = setInterval(function () {
+    //         // for (var i = 0; i < tmpArr.length; i++) {
+    //         //   if (i < tmpArr.length - 1) {
+    //         //     self.drawOneStroke(context, tmpArr[i]);
+    //         //   }
+    //         // }
+    //         var tArr = tmpArr[tmpArr.length - 1];
+    //         if (childCount < tArr.length / 15) {
+    //           childCount++;
+    //           var childArr = tArr.slice(0, childCount * 15);
+    //           self.drawOneStroke(context, childArr);
+    //         } else {
+    //           // self.drawOneStroke(context, tArr);
+    //           clearInterval(childTimer);
+    //           childCount = 0;
+    //         }
+    //         context.draw(true);
+
+    //       },0);
     //     }
-    //     context.stroke();
+    //   } else {
+    //     clearInterval(timer);
+    //     count = 0;
     //   }
-    // });
-    
-  },
+    // },0);
 
-  drawStroke: function (arr) {
+
 
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
