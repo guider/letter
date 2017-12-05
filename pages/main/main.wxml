@@ -1,24 +1,25 @@
 <!--pages/main.wxml-->
 <view class='root'>
+
   <view class='contianer' style='position:relative;'>
 
     <view class='point' wx:for="{{letter.chinese.bishun[0]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
     <view class='point' wx:for="{{letter.chinese.bishun[1]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
-
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
+ 
     <view class='point' wx:for="{{letter.chinese.bishun[2]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
         <view class='point' wx:for="{{letter.chinese.bishun[3]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
         <view class='point' wx:for="{{letter.chinese.bishun[4]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
         <view class='point' wx:for="{{letter.chinese.bishun[5]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
         <view class='point' wx:for="{{letter.chinese.bishun[6]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view>
       <view class='point' wx:for="{{letter.chinese.bishun[7]}}" 
-    style='top:{{item[1]/2}}rpx;left:{{item[0]/2}}rpx;'></view>
+    style='top:{{item[1]/4}}px;left:{{item[0]/4}}px;'></view> 
   </view>
 
 </view>
