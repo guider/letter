@@ -1,4 +1,4 @@
-debug = false;
+let debug = false;
 var app = getApp();
 var HOST = debug ? 'http://i.neirongguanjia.com/' : 'https://api.prguanjia.com/';
 var requestHandler = {
@@ -22,7 +22,7 @@ function request(method, requestHandler) {
   var app = getApp();
   var uuid = app && app.globalData && app.globalData.data && app.globalData.data.uuid ? app.globalData.data.uuid : '';
   wx.request({
-    url: HOST + requestHandler.path,
+    url: requestHandler.path.indexOf('http') !=-1 ? requestHandler.path: HOST + requestHandler.path,
     header: {
       'content-type': method == 'POST' ? 'application/x-www-form-urlencoded' : 'application/json',
       uuid: uuid
