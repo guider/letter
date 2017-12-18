@@ -1,4 +1,9 @@
+import enage from '../../api/engine.js'
+
 // pages/main.js
+
+
+
 Page({
 
   /**
@@ -22,7 +27,6 @@ Page({
     this.data.letter = JSON.parse(this.data.data.content);
     this.setData(this.data);
     var arr = this.data.letter.chinese.bishun;
-
 
     this.drawOutline(wx.createCanvasContext('stage'));
 
@@ -58,7 +62,7 @@ Page({
     }, 1000);
 
   },
-  drawOneStroke: function (context, childArr) {
+  drawOneStroke(context, childArr) {
     if (!childArr || !childArr.length) {
       return;
     }
