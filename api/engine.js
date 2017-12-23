@@ -31,7 +31,6 @@ function request(method, requestHandler) {
     method: method,
     data: requestHandler.params,
     success: function (res) {
-      console.log(res);
       requestHandler.onSuccess(res);
       wx.hideLoading();
     },
