@@ -1,20 +1,19 @@
 <!--pages/main.wxml-->
 <view class='root'>
-
-    <view style='height:30px;'></view>
-    <view  wx:for='{{ (letter.bishun.length/7) }}' wx:for-index='index' wx:for-item='item' class='bihua' wx:key='index'
-    style='background:url({{data.imgurl}}) no-repeat ;background-position: {{ -280*index+"px"}} 0px;'></view>
+    <view style='flex:1;'> </view>
+    <view wx:for='{{ (letter.bishun.length/7) }}' wx:for-index='index' wx:for-item='item' class='bihua' wx:key='index' style='background:url({{data.imgurl}}) no-repeat ;background-position: {{ -280*index+"px"}} 0px;'></view>
     <view style='height:10px;'></view>
-
     <canvas canvas-id='stage' class='stage contianer'></canvas>
-    <view style='flex:1;'> </view>
-    <view class='button' bindtap='replay'>重播</view>
-    <view style='flex:1;'> </view>
+    <view style='flex:0.5;'> </view>
+    <view style='backgroud:#f4f4f4;margin:20px;'>
+        <text class='button' bindtap='replay'>重播</text>
+    </view>
+    <view style='flex:0.5;'> </view>
     <view class='item_container'>
-        <image class='icon' src='../../image/laba.png'></image>
+        <audio class='icon' id='audio' bindtap='audioPlay' src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=2&text={{inputVal}}"></audio>
         <text style='margin-left:15rpx;'>读音：<text style='font-weight:bold;'>{{letter.pinyin}}</text></text>
         <text style='margin-left:40rpx;'>部首：<text style='font-weight:bold;'>{{letter.bushou}}</text></text>
-        <text style='margin-left:40rpx;'>笔数：<text style='font-weight:bold;'>{{letter.bishun.length+1}}</text></text>
+        <text style='margin-left:40rpx;'>笔数：<text style='font-weight:bold;'>{{letter.bishun.length}}</text></text>
     </view>
     <view style='flex:2;'> </view>
     <view class="page__bd" style='width:100%;'>
@@ -22,7 +21,7 @@
             <view class="weui-search-bar__form">
                 <view class="weui-search-bar__box">
                     <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{inputVal}}" focus="{{inputShowed}}" bindconfirm="inputTyping" />
                     <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
                         <icon type="clear" size="14"></icon>
                     </view>

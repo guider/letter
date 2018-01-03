@@ -12,6 +12,7 @@ Page({
             bushou: '',
             pinyin: ''
         },
+        inputVal: '',
         data: {},
         scale: 3,
         data: ''
@@ -21,9 +22,13 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        this.audioCtx = wx.createAudioContext('audio')
+        this.loadData();
+    },
+    loadData() {
         engine.POST({
-            params: { word: '赢' },
-            path: 'http://service.wx.prguanjia.com/edu/character',
+            params: { word: this.data.inputVal ? this.data.inputVal : '字' },
+            path: 'https://api.prguanjia.com/edu/character',
             onSuccess: (res) => {
                 if (!res.data.result) {
                     this.data.data = res.data.data;
@@ -35,54 +40,51 @@ Page({
             onFail: (err) => {
             }
         })
-
-
-
-
-
-
     },
     drawLetter() {
         this.setData(this.data);
         var arr = this.data.letter.bishun;
-        this.drawOutline(wx.createCanvasContext('stage'));
         var context = wx.createCanvasContext('stage');
+        context.draw();
+        this.drawOutline(context);
+        context.setLineWidth(1.5);
         context.setStrokeStyle("#000000");
         context.setFillStyle('#000000');
         var self = this;
         var count = 0;
-        var timer = setInterval(function () {
+        clearInterval(this.timer);
+        clearInterval(this.childTimer);
+        this.timer = setInterval(() => {
             if (count < arr.length) {
                 count++;
                 var tmpArr = arr.slice(0, count);
                 if (tmpArr && tmpArr.length > 0) {
                     var childCount = 0;
-                    var childTimer = setInterval(function () {
+                    self.childTimer = setInterval(() => {
                         var tArr = tmpArr[tmpArr.length - 1];
-                        if (childCount < tArr.length / 15) {
+                        if (childCount < tArr.length / 25) {
                             childCount++;
-                            var childArr = tArr.slice(0, childCount * 15);
+                            var childArr = tArr.slice(0, childCount * 25);
                             self.drawOneStroke(context, childArr);
                             context.draw(true);
                         } else {
-                            clearInterval(childTimer);
+                            clearInterval(self.childTimer);
                             childCount = 0;
                         }
                     }, 40);
                 }
             } else {
-                clearInterval(timer);
+                clearInterval(self.timer);
+                clearInterval(self.childTimer);
                 count = 0;
             }
-        }, 1000);
-
+        }, 1200);
     },
     drawOneStroke(context, childArr) {
         if (!childArr || !childArr.length) {
             return;
         }
         var scale = this.data.scale;
-
         context.moveTo(childArr[0][0] / scale, childArr[0][1] / scale);
         context.stroke();
         for (var i = 0; i <= childArr.length - 1; i++) {
@@ -96,10 +98,8 @@ Page({
         context.setStrokeStyle("#999999");
         context.setFillStyle('#999999');
         var self = this;
-
         arr.forEach(function (item, index) {
             self.drawOneStroke(context, item);
-
             // item.forEach(function(childItem,index){
             //   console.log(childItem);
             // });
@@ -107,44 +107,13 @@ Page({
         context.stroke();
         context.draw(true);
 
-        // var count = 0;
-        // var timer = setInterval(function () {
-        //   if (count < arr.length) {
-        //     count++;
-        //     var tmpArr = arr.slice(0, count);
-        //     if (tmpArr && tmpArr.length > 0) {
-        //       var childCount = 0;
-        //       var childTimer = setInterval(function () {
-        //         // for (var i = 0; i < tmpArr.length; i++) {
-        //         //   if (i < tmpArr.length - 1) {
-        //         //     self.drawOneStroke(context, tmpArr[i]);
-        //         //   }
-        //         // }
-        //         var tArr = tmpArr[tmpArr.length - 1];
-        //         if (childCount < tArr.length / 15) {
-        //           childCount++;
-        //           var childArr = tArr.slice(0, childCount * 15);
-        //           self.drawOneStroke(context, childArr);
-        //         } else {
-        //           // self.drawOneStroke(context, tArr);
-        //           clearInterval(childTimer);
-        //           childCount = 0;
-        //         }
-        //         context.draw(true);
-
-        //       },0);
-        //     }
-        //   } else {
-        //     clearInterval(timer);
-        //     count = 0;
-        //   }
-        // },0);
-
-
-
+    },
+    audioPlay(){
+        this.audioCtx.play();
     },
     replay() {
-        console.log('replay')
+        this.drawLetter();
+
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -212,7 +181,11 @@ Page({
     },
     inputTyping: function (e) {
         this.setData({
-            inputVal: e.detail.value
+            inputVal: e.detail.value,
+            inputShowed: !e.detail.value
         });
+        if(this.data.inputVal){
+            this.loadData();
+        }
     }
 })
