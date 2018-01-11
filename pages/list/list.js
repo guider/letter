@@ -1,32 +1,31 @@
 const app = getApp();
+import engine from '../../api/engine.js'
 const util = require('../../utils/util');
 let that;
 Page({
     data: {
-        topinfo: {},
-        songlist: [],
-        update_time: '',
-        listBgColor: '',
-        isLight: false
+        list: app.globalData.list,
+        topinfo: {
+            ListName: '唐诗三百首',
+            pic_album: 'http://imgcache.qq.com/music/photo_new/T002R300x300M000001qYTzY2oyDyZ.jpg'
+        },
+        songlist: []
     },
     onLoad(options) {
-        that = this;
-        let id = options.topListId || 4;
-        wx.showLoading({title:'数据加载中...', mask: true});
-
-        //* 排行榜api方法
-        util.getToplistInfo(id, (data) => {
-           wx.hideLoading();
-
-           data.color == '14737632' && that.setData({isLight: true});
-           console.log('toplist', data);
-           that.setData({
-              topinfo: data.topinfo,
-              songlist: data.songlist,
-              update_time: data.update_time,
-              listBgColor: that.dealColor(data.color) //*
-           });
-        });
+        console.log(this)
+        engine.GET({
+            params: {},
+            path: 'https://api.prguanjia.com/edu/requiredReading',
+            onSuccess: (res) => {
+                console.log(res)
+                if (!res.data.result) {
+                    // this.data.list = res.data.data;
+                    // this.setData(this.data)
+                }
+            },
+            onFail: (err) => {
+            }
+        })
     },
 
     /* 列表颜色 */
@@ -40,19 +39,14 @@ Page({
         return `rgb(${r},${g},${b})`;
     },
 
- 
+
     /* 列表点击 */
     playsongTap: function (ev) {
-        console.log(' click ')
-        var that = this;
-        app.setGlobalData({songData: ev.currentTarget.dataset.data, songLists: that.data.songlist}); // 改变全局数据
-        var id = ev.currentTarget.dataset.id;
-        var mid = ev.currentTarget.dataset.mid;
-        var albummid = ev.currentTarget.dataset.albummid;
-        var songFrom = ev.currentTarget.dataset.from;
-        var no = ev.currentTarget.dataset.no;
+        // app.setGlobalData({ songData: ev.currentTarget.dataset.data, songLists: that.data.songlist }); // 改变全局数据
+        var item = ev.currentTarget.dataset.data;
+        var index = ev.currentTarget.dataset.index;
         wx.navigateTo({
-            url: '../player/player?id=' + id + '&mid=' + mid + "&albummid=" + albummid + '&songFrom=' + songFrom + '&no=' + no
+            url: '../player/player?data='+JSON.stringify(item)+'&index='+index
         });
     }
 });

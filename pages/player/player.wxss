@@ -291,7 +291,7 @@
     bottom:0;
     left:0;
     z-index: 50;
-    height:178rpx;
+    height:110rpx;
     width:100%;
 }
 #song-wrap .control .operate-wrap{
@@ -355,4 +355,15 @@
     width:100%;
     background-size: cover;
     background-position: bottom center;
+}
+.m-control {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding-bottom: 20rpx;
+  height:100rpx;margin-bottom:80rpx;
+}
+.m-control image {
+  margin: 25rpx 40rpx;
 }

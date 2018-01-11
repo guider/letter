@@ -1,4 +1,6 @@
 //app.js
+import list from './pages/list/data'
+
 App({
     onLaunch: function () {
         // 展示本地存储能力
@@ -34,6 +36,7 @@ App({
         })
     },
     globalData: {
+        list: list,
         songData: null,
         songLists: null
     },

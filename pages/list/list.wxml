@@ -1,23 +1,22 @@
-<view class="toplist-focus" wx:if="{{songlist.length>0}}">
+<view class="toplist-focus" wx:if="{{list.length>0}}">
     <view class="focus-bg" style="background-image: url({{topinfo.pic_album}})"></view>
     <view class="focus-info">
         <view class="focus-text">
             <scroll-view class="focus-tit" scroll-x="{{true}}" scroll-with-animation="{{true}}" style="height:30px;">
                 <text>{{topinfo.ListName}}</text>
             </scroll-view>
-            <text class="focus-desc">{{update_time}} 更新</text>
         </view>
         <view class="focus-play"></view>
     </view>
 </view>
 <view class="song-list {{isLight ? ' light' : ''}}" style="background:{{listBgColor}}">
-    <view class="song-item" wx:for="{{songlist}}" wx:key="unique" bindtap="playsongTap" data-data="{{item.data}}" data-no="{{index}}" data-id="{{item.data.songid}}" data-mid="{{item.data.songmid}}" data-albummid="{{item.data.albummid}}" data-from="toplist">
+    <view class="song-item" wx:for="{{list}}" wx:key="unique" bindtap="playsongTap" data-data="{{item}}" data-index="{{index}}" >
         <text class="song-number">{{index+1}}</text>
         <view class="song-body">
-            <text class="song-tit">{{item.data.songname}}</text>
+            <text class="song-tit">{{item.title}}</text>
             <view class="song-desc">
-                <text wx:for="{{item.data.singer}}" wx:key="unique">{{item.name}}</text>
-                <text> · {{item.data.albumname}}</text>
+                <text style='margin-left:20rpx;'>{{item.author}}</text>
+                <!-- <text> · {{item}}</text> -->
             </view>
         </view>
     </view>
