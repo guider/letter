@@ -1,6 +1,6 @@
-let debug = false;
+let debug = true;
 var app = getApp();
-var HOST = debug ? 'http://i.neirongguanjia.com/' : 'https://api.prguanjia.com/';
+var HOST = debug ? 'http://ti.prguanjia.com/' : 'https://api.prguanjia.com/';
 var requestHandler = {
   params: {},
   path: "",

@@ -1,14 +1,16 @@
 const app = getApp();
 const util = require('../../utils/util.js');
+import engine from '../../api/engine.js';
+
 let that;
 Page({
     data: {
-        poem: { },
+        poem: {},
         selectedIndex: 0,
         playsong: null, // 保存歌词
         songlists: app.globalData.list, // 右侧播放列表
         songUrl: '', // 保存歌曲地址
-        songImg: 'http://imgcache.qq.com/music/photo_new/T002R300x300M000001qYTzY2oyDyZ.jpg',
+        songImg: '',
         songTitle: '',
         songState: { // 播放进度相关
             progress: 0,
@@ -36,11 +38,9 @@ Page({
         this.data.selectedIndex = options.index;
         this.data.poem = app.globalData.list[options.index];
         this.setData(this.data)
-        console.log(this.data);
         // 设置全局对象数据
         // let songlists = app.globalData.songLists;
         // let songdata = app.globalData.songData;
-
 
         // 获取跳转传递过来的数据
         let index = options.index;
@@ -56,7 +56,6 @@ Page({
         let arr = [];
         // 来自排行榜歌曲处理
         if (options.songFrom === 'toplist') {
-            // console.log(songlist);
             for (let i = 0, len = songlists.length; i < len; i++) {
                 songlists[i].data.title = songlists[i].data.songname;
                 songlists[i].data.mid = songlists[i].data.songmid;
@@ -70,36 +69,59 @@ Page({
         wx.getSystemInfo({
             success(res) {
                 that.setData({
-                    lyricSwiperH: res.windowHeight - 180
+                    lyricSwiperH: res.windowHeight - 100
                 })
             }
         });
-
         //* 修改配置方法
         this.changeOption(index, data);
+        this.loadPoemByName(this.data.poem)
     },
 
+    loadPoemByName(poem) {
+        let title = poem.title;
+        title = title.replace('《', '').replace('》', '').replace(' ', '');
+        engine.POST({
+            params: { title: title },
+            path: '/edu/poemByName',
+            onSuccess: (res) => {
+                if (!res.data.result && res.data.data) {
+                    this.data.poemInfo = res.data.data[0];
+                    this.data.songImg = res.data.data[0].cover_url_142
+                    this.setData(this.data)
+                    this.startPlayPoem();
+                    console.log('start')
+                }
+            },
+            onFail: (err) => {
+            }
+        })
+    },
     /**
      * 页面初次渲染完成钩子
     **/
     onReady() {
-        // 使用小程序内置播放音乐api--进来就可以播放
+        // // 使用小程序内置播放音乐api--进来就可以播放
+        // wx.playBackgroundAudio({
+        //     dataUrl: this.data.poemInfo.play_path,
+        //     title: this.data.songTitle,
+        //     coverImgUrl: this.data.songImg
+        // });
+        // this.startPlay(); // 调用自定义播放音乐方法
+    },
+
+    startPlayPoem() {
+        console.log(this.data.poemInfo)
         wx.playBackgroundAudio({
-            dataUrl: this.data.songUrl,
-            title: this.data.songTitle,
+            dataUrl: this.data.poemInfo.play_path,
+            title: this.data.poemInfo.title,
             coverImgUrl: this.data.songImg
         });
         this.startPlay(); // 调用自定义播放音乐方法
     },
 
-    /**
-     * 自定义方法
-    **/
-
     /* 修改配置方法 */
     changeOption(index, data) {
-        //* 获取歌词方法
-        that.getLyric(data);
 
         //* 获取歌取信息方法
         this.setData({
@@ -119,13 +141,6 @@ Page({
         wx.onBackgroundAudioPlay(function () {
             that.songPlay(); // 调用播放状态控制
         });
-    },
-
-    /* 获取歌词 */
-    getLyric(id) {
-        that.setData({
-            lyric: ['鹅鹅鹅', '曲颈向天歌', '白毛浮绿水', '红掌拨清波']
-        })
     },
 
     /* 播放状态控制 */
@@ -272,7 +287,4 @@ Page({
         str = minute + ':' + second;
         return str;
     }
-
-
-
 });
