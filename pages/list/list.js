@@ -7,7 +7,7 @@ Page({
         list: app.globalData.list,
         topinfo: {
             ListName: '唐诗三百首',
-            pic_album: 'http://imgcache.qq.com/music/photo_new/T002R300x300M000001qYTzY2oyDyZ.jpg'
+            pic_album: 'http://fdfs.xmcdn.com/group31/M02/10/1E/wKgJSVlun6jgnxXWAANbaJnn_40681_web_large.jpg'
         },
         songlist: []
     },

@@ -28,7 +28,7 @@ Page({
     loadData() {
         engine.POST({
             params: { word: this.data.inputVal ? this.data.inputVal : '字' },
-            path: 'https://api.prguanjia.com/edu/character',
+            path: 'http://api.prguanjia.com/edu/character',
             onSuccess: (res) => {
                 if (!res.data.result) {
                     this.data.data = res.data.data;

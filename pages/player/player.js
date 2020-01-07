@@ -6,7 +6,6 @@ let that;
 Page({
     data: {
         poem: {},
-        selectedIndex: 0,
         playsong: null, // 保存歌词
         songlists: app.globalData.list, // 右侧播放列表
         songUrl: '', // 保存歌曲地址
@@ -141,6 +140,11 @@ Page({
         wx.onBackgroundAudioPlay(function () {
             that.songPlay(); // 调用播放状态控制
         });
+        wx.onBackgroundAudioStop(() => {
+            this.data.selectedIndex++;
+            this.data.poem = app.globalData.list[this.data.selectedIndex];
+            this.loadPoemByName(this.data.poem)
+        })
     },
 
     /* 播放状态控制 */
@@ -231,48 +235,9 @@ Page({
 
     /* 左右内容滑动 */
     onswiperChange(ev) {
-        // console.log(ev.detail.current);
         let dotsClass = ['', '', ''];
         dotsClass[ev.detail.current] = 'on';
         that.setData({ dotsClass: dotsClass });
-    },
-
-    /* 解码 中文 */
-    reconvert(str) {
-        str = str.replace(/(\\u)(\w{1,4})/gi, function ($0) {
-            return (String.fromCharCode(parseInt((escape($0).replace(/(%5Cu)(\w{1,4})/g, "$2")), 16)));
-        });
-        str = str.replace(/(&#x)(\w{1,4});/gi, function ($0) {
-            return String.fromCharCode(parseInt(escape($0).replace(/(%26%23x)(\w{1,4})(%3B)/g, "$2"), 16));
-        });
-        str = str.replace(/(&#)(\d{1,6});/gi, function ($0) {
-            return String.fromCharCode(parseInt(escape($0).replace(/(%26%23)(\d{1,6})(%3B)/g, "$2")));
-        });
-        return str;
-    },
-
-    /* 解析歌词 */
-    parseLyric(lrc) {
-        let lyrics = lrc.split('\n');
-        let lrcObj = {};
-        for (var i = 0; i < lyrics.length; i++) {
-            let lyric = decodeURIComponent(lyrics[i]);
-            let timeReg = /\[\d*:\d*((\.|\:)\d*)*\]/g;
-            let timeRegExpArr = lyric.match(timeReg);
-            if (!timeRegExpArr)
-                continue;
-            let clause = lyric.replace(timeReg, '');
-            if (clause.length > 0) {
-                for (let k = 0, h = timeRegExpArr.length; k < h; k++) {
-                    let t = timeRegExpArr[k];
-                    let min = Number(String(t.match(/\[\d*/i)).slice(1)),
-                        sec = Number(String(t.match(/\:\d*/i)).slice(1));
-                    let time = min * 60 + sec;
-                    lrcObj[time] = clause;
-                }
-            }
-        }
-        return lrcObj;
     },
 
     /* 转换时间格式 */

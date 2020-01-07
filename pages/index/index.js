@@ -15,7 +15,26 @@ Page({
       url: '../logs/logs'
     })
   },
-  onLoad: function () {
+
+    onShow(opt) {
+      let options = opt
+      console.log('------------  scene --------------------')
+      console.log(opt)
+      console.log(options)
+      if (options && options.scene) {
+          let scene = decodeURIComponent(options.scene)
+          console.log(scene)
+          console.log('------------  scene --------------------')
+      }
+    },
+      onLoad(options) {
+          console.log('------------  scene --------------------')
+          console.log(options)
+          if (options.scene) {
+              let scene = decodeURIComponent(options.scene)
+              console.log(scene)
+              console.log('------------  scene --------------------')
+          }
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
